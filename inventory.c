@@ -45,8 +45,8 @@ void pilihMenu (int *pil){
 void inputBarang(int *total, struct IdentitasBarang *Barang){
     system("cls");
     int n;
-    printf("===============Input Barang===============\n\n");
-    printf("Berapa banyak barang yang anda simpan : "); scanf("%d", &n);
+    printf("  =============== Input Barang ===============\n\n");
+    printf("    Berapa banyak barang yang anda simpan : "); scanf("%d", &n);
     if(*total + n > KAPASITAS){
         printf("Inventory Penuh!");
         return;
@@ -112,12 +112,14 @@ void main (){
             case 3 : {
                 printf("Apakah anda yakin akan keluar? (1/0) "); scanf("%d", &pil);
                 if (pil == 1){
+                    system("cls");
                     printf("Terimakasih telah menggunakan layanan kami!");
-                    break;
+                    delay(1);
                 }
                 if (pil == 0){
-                    pilihan = 1;
+                    pilihan = 0;
                     system("cls");
+                    delay(1);
                 }
             }
             break;
