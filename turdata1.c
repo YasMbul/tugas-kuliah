@@ -3,7 +3,7 @@
 
 #define MAX 100 // batas jumlah barang yang bisa dimasukkan
 
-typedef struct Item
+struct Item
 {
     int kode; 
     char nama[50];
