@@ -16,13 +16,10 @@ struct IdentitasBarang {
 
 void delay(int detik)
 {
-    // Mengubah detik menjadi milidetik
     int milidetik = 1000 * detik;
 
-    // Mengambil waktu saat ini
     clock_t mulai = clock();
 
-    // Ulang sampai waktu lebih dari waktu saat ini + delay
     while (clock() < mulai + milidetik);
 }
 
