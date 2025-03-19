@@ -49,11 +49,11 @@ void inputBarang(int *total, struct IdentitasBarang *Barang){
         return;
     }
     for(int i = 1; i <= n; i++){
-        printf(":: Kode Barang    : [%d] : ", *total + i); scanf("%s", &Barang[*total].kodeBarang);
-        printf(":: Nama Barang    : [%d] : ", *total + i); scanf("%s", &Barang[*total].namaBarang);
-        printf(":: Bahan Dasar    : [%d] : ", *total + i); scanf("%s", &Barang[*total].bahanDasar);
-        printf(":: Jumlah Barang  : [%d] : ", *total + i); scanf("%f", &Barang[*total].jmlh);
-        printf(":: Harga per-unit : [%d] : ", *total + i); scanf("%f", &Barang[*total].harga);
+        printf(":: Kode Barang    : [%d] : ", *total + 1); scanf("%s", &Barang[*total].kodeBarang);
+        printf(":: Nama Barang    : [%d] : ", *total + 1); scanf("%s", &Barang[*total].namaBarang);
+        printf(":: Bahan Dasar    : [%d] : ", *total + 1); scanf("%s", &Barang[*total].bahanDasar);
+        printf(":: Jumlah Barang  : [%d] : ", *total + 1); scanf("%f", &Barang[*total].jmlh);
+        printf(":: Harga per-unit : [%d] : ", *total + 1); scanf("%f", &Barang[*total].harga);
         printf("\n");
         (*total)++;
     }
