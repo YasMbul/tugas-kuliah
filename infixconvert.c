@@ -7,7 +7,7 @@
 
 // Struktur Stack
 typedef struct {
-    char items[MAX];
+    char items[MAX][MAX]; // Stack menyimpan string untuk menangani angka lebih dari satu digit
     int top;
 } Stack;
 
@@ -27,26 +27,26 @@ int isFull(Stack *s) {
 }
 
 // Push elemen ke stack
-void push(Stack *s, char value) {
+void push(Stack *s, char *value) {
     if (!isFull(s)) {
-        s->items[++(s->top)] = value;
+        strcpy(s->items[++(s->top)], value);
     }
 }
 
 // Pop elemen dari stack
-char pop(Stack *s) {
+char* pop(Stack *s) {
     if (!isEmpty(s)) {
         return s->items[(s->top)--];
     }
-    return -1;
+    return "";
 }
 
 // Mengambil elemen puncak stack tanpa menghapusnya
-char peek(Stack *s) {
+char* peek(Stack *s) {
     if (!isEmpty(s)) {
         return s->items[s->top];
     }
-    return -1;
+    return "";
 }
 
 // Prioritas operator
@@ -58,54 +58,78 @@ int precedence(char op) {
 }
 
 // Konversi dari infix ke postfix
-void toPostfix(char *infix, char *postfix) {
+void infixToPostfix(char *infix, char *postfix) {
     Stack s;
     initStack(&s);
-    int i, j = 0;
+    int i = 0, j = 0;
+    char number[MAX];
+    int numIndex = 0;
     
-    for (i = 0; infix[i] != '\0'; i++) {
+    while (infix[i] != '\0') {
         char token = infix[i];
         
-        // Jika operand, langsung tambahkan ke output
-        if (isalnum(token)) {
-            postfix[j++] = token;
-        }
-        // Jika '(', push ke stack
-        else if (token == '(') {
-            push(&s, token);
-        }
-        // Jika ')', pop hingga menemukan '('
-        else if (token == ')') {
-            while (!isEmpty(&s) && peek(&s) != '(') {
-                postfix[j++] = pop(&s);
+        // Jika digit, simpan dalam buffer number
+        if (isdigit(token)) {
+            number[numIndex++] = token;
+        } else {
+            // Jika ada angka yang terkumpul, tambahkan ke postfix
+            if (numIndex > 0) {
+                number[numIndex] = '\0';
+                strcat(postfix, number);
+                strcat(postfix, " "); // Spasi sebagai pemisah
+                numIndex = 0;
             }
-            pop(&s); // Hapus '(' dari stack
-        }
-        // Jika operator
-        else {
-            while (!isEmpty(&s) && precedence(peek(&s)) >= precedence(token)) {
-                postfix[j++] = pop(&s);
+            
+            // Jika '(', push ke stack
+            if (token == '(') {
+                char temp[2] = {token, '\0'};
+                push(&s, temp);
             }
-            push(&s, token);
+            // Jika ')', pop hingga menemukan '('
+            else if (token == ')') {
+                while (!isEmpty(&s) && peek(&s)[0] != '(') {
+                    strcat(postfix, pop(&s));
+                    strcat(postfix, " ");
+                }
+                pop(&s); // Hapus '(' dari stack
+            }
+            // Jika operator
+            else {
+                while (!isEmpty(&s) && precedence(peek(&s)[0]) >= precedence(token)) {
+                    strcat(postfix, pop(&s));
+                    strcat(postfix, " ");
+                }
+                char temp[2] = {token, '\0'};
+                push(&s, temp);
+            }
         }
+        i++;
+    }
+    
+    // Jika ada angka terakhir dalam buffer, tambahkan ke postfix
+    if (numIndex > 0) {
+        number[numIndex] = '\0';
+        strcat(postfix, number);
+        strcat(postfix, " ");
     }
     
     // Pop semua sisa operator di stack
     while (!isEmpty(&s)) {
-        postfix[j++] = pop(&s);
+        strcat(postfix, pop(&s));
+        strcat(postfix, " ");
     }
     
-    postfix[j] = '\0'; // Akhiri string postfix
+    postfix[strlen(postfix) - 1] = '\0'; // Hapus spasi terakhir
 }
 
 int main() {
     system("cls");
-    char infix[MAX], postfix[MAX];
+    char infix[MAX], postfix[MAX] = "";
     
     printf("Masukkan infix: ");
-    scanf("%s", infix);
+    fgets(infix, MAX, stdin);
     
-    toPostfix(infix, postfix);
+    infixToPostfix(infix, postfix);
     
     printf("Hasil postfix: %s\n", postfix);
     
