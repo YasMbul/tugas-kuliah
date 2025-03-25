@@ -194,17 +194,24 @@ double hasilPostfix(char *postfix) {
 
 int main() {
     system("cls");
-    char infix[MAX], postfix[MAX] = "";
-    
-    printf("Masukkan ekspresi infix: ");
-    fgets(infix, MAX, stdin);
-    infix[strcspn(infix, "\n")] = 0; // Hapus newline
-    
-    infixToPostfix(infix, postfix);
-    printf("Ekspresi postfix: %s\n", postfix);
-    
-    double hasil = hasilPostfix(postfix);
-    printf("Hasil perhitungan: %.2lf\n", hasil);
-    
+    char infix[MAX];
+    char jwb;
+    do {
+        char postfix[MAX] = "";
+        printf("Masukkan ekspresi infix: ");
+        fgets(infix, MAX, stdin);
+        infix[strcspn(infix, "\n")] = 0; // Hapus newline
+        
+        infixToPostfix(infix, postfix);
+        printf("Ekspresi postfix: %s\n", postfix);
+        
+        // strcpy(postfixCopy, postfix);
+        double hasil = hasilPostfix(postfix);
+        printf("Hasil perhitungan: %.2lf\n", hasil);
+
+        printf("Apakah ingin mengulang maka ketik (Y/y) "); scanf("%c", &jwb);
+        getchar();
+    } while (jwb == 'y' || jwb == 'Y');
+    printf("Program selesai!");
     return 0;
 }
