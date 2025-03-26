@@ -117,30 +117,37 @@ int main() {
     char cek;
     int pil, value, newValue;
     Element el;
+    char input[10];
     
     do {
         int pil = pilihMenu();
         switch (pil) {
             case 1:
-                do{
-                    printf("Masukkan bilangan: ");
-                    scanf("%d", &el.value);
+                while (1) {
+                    printf("Masukkan bilangan (ketik 'n' untuk berhenti): ");
+                    scanf("%s", input);
+                    if (input[0] == 'n' || input[0] == 'N') break;
+                    el.value = atoi(input);
                     enqueue(&q, el);
-                    printf("Apakah anda ingin menginput bilangan lagi? (Y/y) "); 
-                    scanf("%c", &cek);
-                    getchar();
-                    system("cls");
-                } while (cek == 'Y' || cek == 'y');
+                }
                 break;
             case 2:
                 displayQueue(&q);
                 break;
             case 3:
+                if (isEmpty(&q)){
+                    printf("Queue Kosong!\n");
+                    break;
+                }
                 printf("Masukkan bilangan yang dicari: ");
                 scanf("%d", &value);
                 searchQueue(&q, value);
                 break;
             case 4:
+                if (isEmpty(&q)){
+                    printf("Queue Kosong!\n");
+                    break;
+                }
                 printf("Masukkan bilangan yang ingin diedit: ");
                 scanf("%d", &value);
                 printf("Masukkan bilangan baru: ");
