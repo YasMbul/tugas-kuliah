@@ -180,7 +180,7 @@ int main() {
         infix[strcspn(infix, "\n")] = 0; 
         
         infixToPostfix(infix, postfix);
-        printf("Ekspresi postfix: %s\n", postfix);
+        printf("Hasil postfix: %s\n", postfix);
         
         double hasil = hasilPostfix(postfix);
         printf("Hasil perhitungan: %.2lf\n", hasil);
