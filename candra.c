@@ -1,23 +1,22 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <time.h>
+
 #define MAX 100
 
-// Struktur data untuk elemen queue
 typedef struct {
-    int nilai;
-} Elemen;
+    int value;
+} Element;
 
-// Struktur queue
 typedef struct {
-    Elemen data[MAX];
-    int front, rear;
-} Queue;
+    Element data[MAX];
+    int size;       
+    int start;
+} CircularQueue;
 
 int pilihMenu (){
     int pil;
     printf("=============================================================================\n");
-    printf("|                               TUGAS QUEUE                                 |\n");
+    printf("|                               QUEUE PROGRAM                               |\n");
     printf("|---------------------------------------------------------------------------|\n");
     printf("|                                                                           |\n");
     printf("|                           1. Input Queue                                  |\n");
@@ -27,208 +26,195 @@ int pilihMenu (){
     printf("|                           5. Hapus Elemen                                 |\n");
     printf("|                           6. Nilai total, rata-rata,                      |\n");
     printf("|                              terbesar dan terkecil                        |\n");
-    printf("|                           7. Exit                                         |\n");
+    printf("|                           7. Exit Program                                 |\n");
     printf("|                                                                           |\n");
     printf("|***************************************************************************|\n");
     printf("=============================================================================\n");
-    printf("                         Masukkan Pilihan anda : "); 
+    printf("                            Masukkan Pilihan anda : "); 
     scanf("%d", &pil);
-    system("cls");
     return pil;
 }
 
-void initQueue(Queue *q) {
-    q->front = q->rear = -1;
+void initQueue(CircularQueue *q) {
+    q->size = 0;
+    q->start = 0;
 }
 
-int isFull(Queue *q) {
-    return q->rear == MAX - 1;
+int isFull(CircularQueue *q) {
+    return q->size == MAX;
 }
 
-int isEmpty(Queue *q) {
-    return q->front == -1 || q->front > q->rear;
+int isEmpty(CircularQueue *q) {
+    return q->size == 0;
 }
 
-int enqueue(Queue *q, Elemen el) {
+void enqueue(CircularQueue *q, Element el) {
     if (isFull(q)) {
         printf("Queue penuh!\n");
-        return 0;
+        return;
     }
-    if (isEmpty(q)) q->front = 0;
-    q->data[++q->rear] = el;
+
+    int end = (q->start + q->size) % MAX;
+    q->data[end] = el;
+    q->size++;
     printf("Elemen berhasil ditambahkan!\n");
-    return 1;
 }
 
-void displayQueue(Queue *q) {
+void displayQueue(CircularQueue *q) {
     if (isEmpty(q)) {
         printf("Queue kosong!\n");
         return;
     }
     printf("Isi Queue:\n");
-    for (int i = q->front; i <= q->rear; i++) {
-        printf("%d ", q->data[i].nilai);
+    for (int i = 0; i < q->size; i++) {
+        int index = (q->start + i) % MAX;
+        printf("%d ", q->data[index].value);
     }
-    printf("\nPanjang Queue / Banyak elemen : %d\n", q->rear + 1);
+    printf("\n");
 }
 
-int searchQueue(Queue *q, int value) {
-    if (isEmpty(q)) {
-        printf("Queue kosong!\n");
-        return 0;
-    }
-    for (int i = q->front; i <= q->rear; i++) {
-        if (q->data[i].nilai == value) {
-            printf("Ditemukan: %d\n", q->data[i].nilai);
-            printf("Elemen ke-%d dari %d elemen\n", i+1, q->rear + 1);
-            return 1;
-        }
-    }
-    printf("Elemen tidak ditemukan!\n");
-    return 0;
-}
-
-void editQueue(Queue *q, int lama, int baru) {
+void searchQueue(CircularQueue *q, int value) {
     if (isEmpty(q)) {
         printf("Queue kosong!\n");
         return;
     }
-    for (int i = q->front; i <= q->rear; i++) {
-        if (q->data[i].nilai == lama) {
-            q->data[i].nilai = baru;
-            printf("Data urutan ke-%d berhasil diperbarui!\n", i+1);
+    for (int i = 0; i < q->size; i++) {
+        int index = (q->start + i) % MAX;
+        if (q->data[index].value == value) {
+            printf("Ditemukan: %d\n", q->data[index].value);
             return;
         }
     }
     printf("Elemen tidak ditemukan!\n");
 }
 
-void dequeue(Queue *q) {
+void editQueue(CircularQueue *q, int oldValue, int newValue) {
     if (isEmpty(q)) {
         printf("Queue kosong!\n");
         return;
     }
-    printf("Elemen %d dihapus!\n", q->data[q->front].nilai);
-    q->front++;
-    if (q->front > q->rear) initQueue(q);
+    for (int i = 0; i < q->size; i++) {
+        int index = (q->start + i) % MAX;
+        if (q->data[index].value == oldValue) {
+            q->data[index].value = newValue;
+            printf("Data berhasil diperbarui!\n");
+            return;
+        }
+    }
+    printf("Elemen tidak ditemukan!\n");
 }
 
-void cekData(Queue *q){
-    double total = 0;
-    double rata = 0;
-    int bigest = 0, smallest = q->data[q->front].nilai;
-    for (int i = 0; i <= q->rear; i++){
-        total += q->data[i].nilai;
+void dequeue(CircularQueue *q) {
+    if (isEmpty(q)) {
+        printf("Queue kosong!\n");
+        return;
     }
-    rata = total / (q->rear + 1);
+    printf("Elemen %d dihapus!\n", q->data[q->start].value);
+    q->start = (q->start + 1) % MAX;
+    q->size--;
+}
 
-    for (int i = 0; i <= q->rear; i++){
-        if (q->data[i].nilai > bigest){
-            bigest = q->data[i].nilai;
+void rerata(CircularQueue *q){
+    if (isEmpty(q)) {
+        printf("Queue kosong!\n");
+        return;
+    }
+    
+    double total = 0;
+    int bigest = q->data[q->start].value;
+    int smallest = q->data[q->start].value;
+
+    for (int i = 0; i < q->size; i++) {
+        int index = (q->start + i) % MAX;
+        int current = q->data[index].value;
+        total += current;
+
+        if (current > bigest) {
+            bigest = current;
         }
-        if (q->data[i].nilai < smallest){
-            smallest = q->data[i].nilai;
+        if (current < smallest) {
+            smallest = current;
         }
     }
+
+    double rata = total / q->size;
 
     printf("Jumlah nilai dalam Queue = %.2lf\n", total);
     printf("Dengan rata-rata = %.2lf\n", rata);
     printf("Nilai terbesar dalam Queue = %d\n", bigest);
     printf("Nilai terkecil dalam Queue = %d\n", smallest);
 }
-void enter(){
-    printf("\nEnter untuk melanjutkan");
-    getchar();
-    getchar();
-    system("cls");
-}
-void delay(int detik)
-{
-    int milidetik = 1000 * detik;
-
-    clock_t mulai = clock();
-
-    while (clock() < mulai + milidetik);
-    system("cls");
-}
 
 int main() {
-    system("cls");
-    Queue q;
+    CircularQueue q;
     initQueue(&q);
-    char cek;
-    int pil, value, update;
-    Elemen el;
+    int pil, value, newValue;
+    Element el;
     char input[10];
     
-    do {
-        int pil = pilihMenu();
+    while (1) {
+        system("cls");  
+        pil = pilihMenu();
+        
         switch (pil) {
             case 1:
                 while (1) {
                     printf("Masukkan bilangan (ketik 'n' untuk berhenti): ");
                     scanf("%s", input);
                     if (input[0] == 'n' || input[0] == 'N') break;
-                    el.nilai = atoi(input);
-                    if (enqueue(&q, el) == 0) break;
+                    el.value = atoi(input);
+                    enqueue(&q, el);
                 }
-                delay(2);
                 break;
             case 2:
                 displayQueue(&q);
-                enter();
+                printf("\nTekan Enter untuk melanjutkan...");
+                getchar(); getchar();  // Wait for user to press Enter
                 break;
             case 3:
                 if (isEmpty(&q)){
                     printf("Queue Kosong!\n");
-                    delay(2);
                     break;
                 }
                 printf("Masukkan bilangan yang dicari: ");
                 scanf("%d", &value);
                 searchQueue(&q, value);
-                delay(2);
+                printf("\nTekan Enter untuk melanjutkan...");
+                getchar(); getchar();  // Wait for user to press Enter
                 break;
             case 4:
                 if (isEmpty(&q)){
                     printf("Queue Kosong!\n");
-                    delay(2);
                     break;
                 }
-                displayQueue(&q);
                 printf("Masukkan bilangan yang ingin diedit: ");
                 scanf("%d", &value);
-                system("cls");
-                if (searchQueue(&q, value) == 0) {
-                    delay(2);
-                    break;
-                }
                 printf("Masukkan bilangan baru: ");
-                scanf("%d", &update);
-                editQueue(&q, value, update);
-                enter();
+                scanf("%d", &newValue);
+                editQueue(&q, value, newValue);
+                printf("\nTekan Enter untuk melanjutkan...");
+                getchar(); getchar();  // Wait for user to press Enter
                 break;
             case 5:
                 dequeue(&q);
-                enter();
+                printf("\nTekan Enter untuk melanjutkan...");
+                getchar(); getchar();  // Wait for user to press Enter
                 break;
             case 6:
-                if (isEmpty(&q)){
-                    printf("Queue kosong!\n");
-                    delay(2);
-                    break;
-                }
-                cekData(&q);
-                enter();
+                rerata(&q);
+                printf("\nTekan Enter untuk melanjutkan...");
+                getchar(); getchar();  // Wait for user to press Enter
                 break;
             case 7:
-                printf("Keluar dari program Queue!\n");
-                return 0;
+                printf("Keluar dari program.\n");
+                printf("Terima kasih telah menggunakan program!\n");
+                return 0;  // Langsung keluar dari program
             default:
                 printf("Pilihan tidak valid!\n");
-                delay(2);
+                printf("\nTekan Enter untuk melanjutkan...");
+                getchar(); getchar();  // Wait for user to press Enter
         }
-    } while (pil != 7);
+    }
     
     return 0;
 }
