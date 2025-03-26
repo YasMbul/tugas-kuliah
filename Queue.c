@@ -11,7 +11,7 @@ typedef struct {
 // Struktur queue
 typedef struct {
     Elemen data[MAX];
-    int front, rear;
+    int head, tail;
 } Queue;
 
 int pilihMenu (){
@@ -37,16 +37,16 @@ int pilihMenu (){
     return pil;
 }
 
-void initQueue(Queue *q) {
-    q->front = q->rear = -1;
+void emptyQueue(Queue *q) {
+    q->head = q->tail = -1;
 }
 
 int isFull(Queue *q) {
-    return q->rear == MAX - 1;
+    return q->tail == MAX - 1;
 }
 
 int isEmpty(Queue *q) {
-    return q->front == -1 || q->front > q->rear;
+    return q->head == -1 || q->head > q->tail;
 }
 
 int enqueue(Queue *q, Elemen el) {
@@ -54,8 +54,8 @@ int enqueue(Queue *q, Elemen el) {
         printf("Queue penuh!\n");
         return 0;
     }
-    if (isEmpty(q)) q->front = 0;
-    q->data[++q->rear] = el;
+    if (isEmpty(q)) q->head = 0;
+    q->data[++q->tail] = el;
     printf("Elemen berhasil ditambahkan!\n");
     return 1;
 }
@@ -66,10 +66,10 @@ void displayQueue(Queue *q) {
         return;
     }
     printf("Isi Queue:\n");
-    for (int i = q->front; i <= q->rear; i++) {
+    for (int i = q->head; i <= q->tail; i++) {
         printf("%d ", q->data[i].nilai);
     }
-    printf("\nPanjang Queue / Banyak elemen : %d\n", q->rear + 1);
+    printf("\nPanjang Queue / Banyak elemen : %d\n", q->tail + 1);
 }
 
 int searchQueue(Queue *q, int value) {
@@ -77,10 +77,10 @@ int searchQueue(Queue *q, int value) {
         printf("Queue kosong!\n");
         return 0;
     }
-    for (int i = q->front; i <= q->rear; i++) {
+    for (int i = q->head; i <= q->tail; i++) {
         if (q->data[i].nilai == value) {
             printf("Ditemukan: %d\n", q->data[i].nilai);
-            printf("Elemen ke-%d dari %d elemen\n", i+1, q->rear + 1);
+            printf("Elemen ke-%d dari %d elemen\n", i+1, q->tail + 1);
             return 1;
         }
     }
@@ -93,7 +93,7 @@ void editQueue(Queue *q, int lama, int baru) {
         printf("Queue kosong!\n");
         return;
     }
-    for (int i = q->front; i <= q->rear; i++) {
+    for (int i = q->head; i <= q->tail; i++) {
         if (q->data[i].nilai == lama) {
             q->data[i].nilai = baru;
             printf("Data urutan ke-%d berhasil diperbarui!\n", i+1);
@@ -108,21 +108,24 @@ void dequeue(Queue *q) {
         printf("Queue kosong!\n");
         return;
     }
-    printf("Elemen %d dihapus!\n", q->data[q->front].nilai);
-    q->front++;
-    if (q->front > q->rear) initQueue(q);
+    printf("Elemen %d dihapus!\n", q->data[q->head].nilai);
+    for (int i = 0; i < q->tail; i++){
+        q->data[i].nilai = q->data[i+1].nilai;
+    }
+    q->tail--;
+    if (q->head > q->tail) emptyQueue(q);
 }
 
 void cekData(Queue *q){
     double total = 0;
     double rata = 0;
-    int bigest = 0, smallest = q->data[q->front].nilai;
-    for (int i = 0; i <= q->rear; i++){
+    int bigest = 0, smallest = q->data[q->head].nilai;
+    for (int i = 0; i <= q->tail; i++){
         total += q->data[i].nilai;
     }
-    rata = total / (q->rear + 1);
+    rata = total / (q->tail + 1);
 
-    for (int i = 0; i <= q->rear; i++){
+    for (int i = 0; i <= q->tail; i++){
         if (q->data[i].nilai > bigest){
             bigest = q->data[i].nilai;
         }
@@ -155,8 +158,7 @@ void delay(int detik)
 int main() {
     system("cls");
     Queue q;
-    initQueue(&q);
-    char cek;
+    emptyQueue(&q);
     int pil, value, update;
     Elemen el;
     char input[10];
