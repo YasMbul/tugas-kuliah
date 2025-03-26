@@ -1,10 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
-
-
-
-#define MAX 5
+#define MAX 100
 
 // Struktur data untuk elemen queue
 typedef struct {
@@ -234,5 +231,3 @@ int main() {
     
     return 0;
 }
-
-
