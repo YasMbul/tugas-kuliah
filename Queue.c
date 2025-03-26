@@ -143,8 +143,7 @@ void enter(){
     getchar();
     system("cls");
 }
-void delay(int detik)
-{
+void delay(int detik){
     int milidetik = 1000 * detik;
 
     clock_t mulai = clock();
