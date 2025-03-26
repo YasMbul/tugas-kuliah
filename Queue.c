@@ -58,7 +58,7 @@ int enqueue(Queue *q, Elemen el) {
     return 1;
 }
 
-void displayQueue(Queue *q) {
+void tampilQueue(Queue *q) {
     if (isEmpty(q)) {
         printf("Queue kosong!\n");
         return;
@@ -175,7 +175,7 @@ int main() {
                 delay(2);
                 break;
             case 2:
-                displayQueue(&q);
+                tampilQueue(&q);
                 enter();
                 break;
             case 3:
@@ -195,7 +195,7 @@ int main() {
                     delay(2);
                     break;
                 }
-                displayQueue(&q);
+                tampilQueue(&q);
                 printf("Masukkan bilangan yang ingin diedit: ");
                 scanf("%d", &value);
                 system("cls");
