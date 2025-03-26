@@ -110,6 +110,30 @@ void dequeue(Queue *q) {
     if (q->front > q->rear) initQueue(q);
 }
 
+void rerata(Queue *q){
+    double total = 0;
+    double rata = 0;
+    int bigest = 0, smallest = q->data[q->front].value;
+    for (int i = 0; i <= q->rear; i++){
+        total += q->data[i].value;
+    }
+    rata = total / (q->rear + 1);
+
+    for (int i = 0; i <= q->rear; i++){
+        if (q->data[i].value > bigest){
+            bigest = q->data[i].value;
+        }
+        if (q->data[i].value < smallest){
+            smallest = q->data[i].value;
+        }
+    }
+
+    printf("Jumlah nilai dalam Queue = %.2lf\n", total);
+    printf("Dengan rata-rata = %.2lf\n", rata);
+    printf("Nilai terbesar dalam Queue = %d\n", bigest);
+    printf("Nilai terkecil dalam Queue = %d\n", smallest);
+}
+
 int main() {
     system("cls");
     Queue q;
@@ -158,12 +182,19 @@ int main() {
                 dequeue(&q);
                 break;
             case 6:
+                if (isEmpty(&q)){
+                    printf("Queue kosong!\n");
+                    break;
+                }
+                rerata(&q);
+                break;
+            case 7:
                 printf("Keluar dari program.\n");
                 break;
             default:
                 printf("Pilihan tidak valid!\n");
         }
-    } while (pil != 6);
+    } while (pil != 7);
     
     return 0;
 }
