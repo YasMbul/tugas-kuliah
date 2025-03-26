@@ -3,12 +3,10 @@
 #include <time.h>
 #define MAX 100
 
-// Struktur data untuk elemen queue
 typedef struct {
     int nilai;
 } Elemen;
 
-// Struktur queue
 typedef struct {
     Elemen data[MAX];
     int head, tail;
