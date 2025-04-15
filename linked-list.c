@@ -98,7 +98,7 @@ void tampilkan() {
    Node* temp = head;
    printf("Isi linked list: ");
    while (temp != NULL) {
-      printf("%d -> ", temp->data);
+      printf("%d > ", temp->data);
       temp = temp->next;
    }
    printf("NULL\n");
