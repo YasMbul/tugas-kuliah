@@ -10,7 +10,6 @@ typedef struct Node {
 
 Node* head = NULL;
 
-// Cek apakah linked list kosong
 bool isEmpty() {
    if (head == NULL) {
       return true;
@@ -19,7 +18,6 @@ bool isEmpty() {
    }
 }
 
-// Tambah elemen ke akhir linked list
 void tambahBelakang(int value) {
    Node* baru = (Node*)malloc(sizeof(Node));
    baru->data = value;
@@ -51,7 +49,6 @@ void tambahDepan(int value) {
    printf("Data %d berhasil ditambahkan.\n", value);
 }
 
-// Hapus elemen pertama
 void hapusDepan() {
    if (isEmpty()) {
       printf("Linked list kosong, tidak ada yang bisa dihapus.\n");
@@ -89,7 +86,6 @@ void hapusBelakang() {
    prev->next = NULL;
 }
 
-// Tampilkan semua elemen
 void tampilkan() {
    if (isEmpty()) {
       printf("Linked list kosong.\n");
@@ -121,11 +117,9 @@ void delay(int detik){
    system("cls");
 }
 
-// Menu utama
-int main() {
+void main() {
    int pilihan, data, subpil;
    system("cls");
-   
    do {
       system("cls");
       printf("\nMenu:\n");
@@ -134,18 +128,15 @@ int main() {
       printf("3. Tampilkan data\n");
       printf("4. Cek apakah kosong\n");
       printf("5. Keluar\n");
-      printf("Pilih: ");
-      scanf("%d", &pilihan);
+      printf("Pilih: "); scanf("%d", &pilihan);
 
       switch (pilihan) {
          case 1:
             system("cls");
             printf("1. tambah dari depan\n");
             printf("2. tambah dari belakang\n");
-            printf("Pilih: ");
-            scanf("%d", &subpil);
-            printf("Masukkan data: ");
-            scanf("%d", &data);
+            printf("Pilih: "); scanf("%d", &subpil);
+            printf("Masukkan data: "); scanf("%d", &data);
             switch (subpil) {
                case 1:
                   tambahDepan(data);
@@ -161,15 +152,14 @@ int main() {
             system("cls");
             printf("1. Hapus dari depan\n");
             printf("2. Hapus dari belakang\n");
-            printf("Pilih: ");
-            scanf("%d", &subpil);
+            printf("Pilih: "); scanf("%d", &subpil);
             switch(subpil) {
                case 1:
-                  hapusDepan(); // hapus dari depan
+                  hapusDepan(); 
                   delay(2);
                   break;
                case 2:
-                  hapusBelakang(); // hapus dari belakang
+                  hapusBelakang(); 
                   delay(2);
                   break;
                default:
@@ -184,7 +174,7 @@ int main() {
             if(isEmpty())
                printf("Linked list kosong.\n");
             else 
-               printf("Linked list tidak kosong.\n");
+               printf("Linked list terisi.\n");
             enter();
             break;
          case 5:
@@ -194,6 +184,4 @@ int main() {
             printf("Pilihan tidak valid.\n");
       }
    } while (pilihan != 5);
-
-   return 0;
 }
