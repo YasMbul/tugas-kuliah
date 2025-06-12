@@ -95,15 +95,15 @@ int main() {
       printf("Anda Tidak Menginputkan Apapun! Coba Jalankan Ulang Kode!");
       return 0;
    }
-   printf("PreOrder Traversal : ");
+   printf("Hasil PreOrder : ");
    preOrder(root);
    printf("\n");
    
-   printf("InOrder Traversal  : ");
+   printf("Hasil InOrder  : ");
    inOrder(root);
    printf("\n");
    
-   printf("PostOrder Traversal: ");
+   printf("Hasil PostOrder : ");
    postOrder(root);
    printf("\n");
    
