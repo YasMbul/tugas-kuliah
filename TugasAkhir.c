@@ -80,8 +80,6 @@ void tampilQueue(){
    printf("\n");
 }
 
-void tambahArsip(Arsip arsip); // forward declaration
-
 // BST
 typedef struct BSTNode {
    Arsip data;
@@ -133,7 +131,7 @@ void tampilArsip() {
    Node* temp = head;
    printf("\n--- Daftar Arsip ---\n");
    while (temp != NULL) {
-      printf("ID: %d, Nama: %s, Tanggal: %s, Kategori: %s\n",
+      printf("ID: %d\n Nama: %s\n Tanggal: %s\n Kategori: %s\n",
          temp->data.id, temp->data.nama, temp->data.tanggal, temp->data.kategori);
       temp = temp->next;
    }
@@ -244,6 +242,7 @@ void hapusArsip() {
          if (prev == NULL) head = curr->next;
          else prev->next = curr->next;
 
+         rootBST = deleteBST(rootBST, curr->data.nama);
          printf("Arsip dengan ID %d dan nama %s berhasil dihapus.\n", curr->data.id, curr->data.nama);
          free(curr);
          return;
@@ -298,6 +297,7 @@ int main() {
             Node *curr = head, *prev = NULL;
             while (curr != NULL) {
                if (curr->data.id == arsip.id) {
+                  rootBST = deleteBST(rootBST, arsip.nama);
                   if (prev == NULL) head = curr->next;
                   else prev->next = curr->next;
                   free(curr);
