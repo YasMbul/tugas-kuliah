@@ -151,6 +151,35 @@ void cariArsip(char* nama) {
    printf("\nArsip tidak ditemukan\n");
 }
 
+BSTNode* deleteBST(BSTNode* root, char* nama) {
+   if (root == NULL) return NULL;
+
+   int cmp = strcmp(nama, root->data.nama);
+   if (cmp < 0) {
+      root->left = deleteBST(root->left, nama);
+   } else if (cmp > 0) {
+      root->right = deleteBST(root->right, nama);
+   } else {
+      // Node ditemukan
+      if (root->left == NULL) {
+         BSTNode* temp = root->right;
+         free(root);
+         return temp;
+      } else if (root->right == NULL) {
+         BSTNode* temp = root->left;
+         free(root);
+         return temp;
+      } else {
+         // Dua anak
+         BSTNode* temp = root->right;
+         while (temp->left != NULL) temp = temp->left;
+         root->data = temp->data;
+         root->right = deleteBST(root->right, temp->data.nama);
+      }
+   }
+   return root;
+}
+
 void editArsip() {
    if (head == NULL) {
       printf("\nTidak ada arsip yang tersedia untuk diedit.\n");
@@ -168,6 +197,9 @@ void editArsip() {
          printf("Arsip ditemukan: %s\n", temp->data.nama);
          printf("Masukkan data baru (biarkan kosong untuk tidak mengubah):\n");
 
+         char namaLama[50];
+         strcpy(namaLama, temp->data.nama);
+
          char input[50];
          printf("Nama [%s]: ", temp->data.nama);
          fgets(input, 50, stdin);
@@ -183,6 +215,9 @@ void editArsip() {
          fgets(input, 30, stdin);
          input[strcspn(input, "\n")] = '\0';
          if (strlen(input) > 0) strcpy(temp->data.kategori, input);
+
+         rootBST = deleteBST(rootBST, namaLama);
+         rootBST = insertBST(rootBST, temp->data);
 
          printf("\nArsip berhasil diperbarui.\n");
          return;
