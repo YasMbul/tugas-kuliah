@@ -252,7 +252,6 @@ void tampilArsip() {
          }
       }
       
-      
       // Menu utama
       int main() {
          TreeNode* root = buatNode("Arsip");
