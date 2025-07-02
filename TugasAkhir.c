@@ -27,6 +27,9 @@ int top = -1;
 void push(Arsip arsip) {
    if (top < MAX - 1)
    stack[++top] = arsip;
+   else 
+   printf("Stack Penuh!\n");
+
 }
 
 Arsip pop() {
